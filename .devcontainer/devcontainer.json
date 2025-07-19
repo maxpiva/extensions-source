@@ -1,5 +1,5 @@
 {
-  "name": "Android Dev",
+  "name": "Android Dev (Java 21)",
   "build": {
     "dockerfile": "Dockerfile"
   },
@@ -11,7 +11,9 @@
     "vscode": {
       "extensions": [
         "fwcd.kotlin",
-        "vscjava.vscode-java-pack"
+        "vscjava.vscode-java-pack",
+        "redhat.android",
+        "nexusrepo.gradle-language"
       ]
     }
   }
