@@ -78,13 +78,17 @@ class AsuraScans : ParsedHttpSource(), ConfigurableSource {
             OPTIMIZED_IMAGE_PATH_REGEX.find(request.url.encodedPath)?.also { match ->
                 val (id, page) = match.destructured
                 val newUrl = request.url.newBuilder()
-                    .encodedPath("/storage/media/$id/$page.webp")
+                    .encodedPath("/storage/media/$id/$page.jpg")
                     .build()
 
                 val response = chain.proceed(request.newBuilder().url(newUrl).build())
                 if (response.code != 404) {
                     return response
                 } else {
+                    newUrl = request.url.newBuilder().encodedPath("/storage/media/$id/$page.webp").build()
+                    response = chain.proceed(request.newBuilder().url(newUrl).build())
+                    if (response.code != 404)
+                        return response
                     failedHighQuality = true
                     response.close()
                 }

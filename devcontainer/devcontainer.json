@@ -1,0 +1,20 @@
+{
+  "name": "Android Extensions Builder",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "fwcd.kotlin",
+        "redhat.android",
+        "nexusrepo.gradle-language"
+      ]
+    }
+  },
+  "remoteEnv": {
+    "ANDROID_SDK_ROOT": "/opt/android-sdk",
+    "PATH": "/opt/android-sdk/platform-tools:/opt/android-sdk/cmdline-tools/latest/bin:${PATH}"
+  }
+}
