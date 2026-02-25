@@ -227,23 +227,17 @@ class Readcomiconline :
         var encryptedLinks = mutableListOf<String>()
         val useSecondServer = serverPref() == "s2"
 
-        // Get script elements
-        val scripts = document.select("script")
-
         // We'll evaluate every script that exists in the HTML
         if (remoteConfigItem == null) {
             throw IOException("Failed to retrieve configuration")
         }
 
-        for (script in scripts) {
-            QuickJs.create().use {
-                val eval =
-                    "let _encryptedString = ${Json.encodeToString(script.data().trimIndent())};let _useServer2 = $useSecondServer;${remoteConfigItem!!.imageDecryptEval}"
-                val evalResult = (it.evaluate(eval) as String).parseAs<List<String>>()
-
-                // Add results to 'encryptedLinks'
-                encryptedLinks.addAll(evalResult)
-            }
+        // Join all script data into a single string and evaluate once
+        val combinedScript = document.select("script").joinToString("\n") { it.data().trimIndent() }
+        QuickJs.create().use {
+            val eval =
+                "let _encryptedString = ${Json.encodeToString(combinedScript)};let _useServer2 = $useSecondServer;${remoteConfigItem!!.imageDecryptEval}"
+            encryptedLinks.addAll((it.evaluate(eval) as String).parseAs<List<String>>())
         }
 
         encryptedLinks = encryptedLinks.let { links ->
